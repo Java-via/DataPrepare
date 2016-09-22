@@ -1,0 +1,9 @@
+*.[oa]
+*.py[co]
+*.exe
+*.log
+*.out
+*.dat
+*.txt
+*.temp
+.idea/

@@ -2,9 +2,9 @@
 
 import pymysql
 
-DB_HOST = "localhost"
+DB_HOST = "ec2-54-169-79-230.ap-southeast-1.compute.amazonaws.com"
 DB_USER = "appuser"
-DB_PASSWD = "456"
+DB_PASSWD = "123"
 DB_DB = "test_db"
 DB_CHARTSET = "utf8"
 
