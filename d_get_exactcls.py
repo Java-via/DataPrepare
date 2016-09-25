@@ -23,20 +23,21 @@ def get_exactcla():
     cur.execute(andr_sql)
     pkg_cls_dic = {}
     for item in cur.fetchall():
-        pkg_cls_dic[item[0]] = item[1] + "\t" + item[2]
+        print(item)
+        pkg_cls_dic[item[0]] = item[1]
 
     for key in bundle_pkg_dic:
         pkgname = bundle_pkg_dic[key]
         if pkgname in pkg_cls_dic:
             logging.debug("pkgname in android: %s", pkgname)
-            classify = pkg_cls_dic[pkgname].split("\t")[0]
+            classify = pkg_cls_dic[pkgname]
             cur.execute(update_sql, (classify, 1, key))
+            count += 1
         else:
             logging.debug("pkgname not in android: %s", pkgname)
         if count % 50 == 0:
             print("update")
             conn.commit()
-        count += 1
     conn.commit()
 
 if __name__ == "__main__":

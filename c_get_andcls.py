@@ -7,6 +7,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 def get_classify():
+    # if use t_apps_basic_new use next method named get_andr_classify
     # get android apps that accord with standard classify  t_apps_basic_united  --->  t_pkg_classify
     conn, cur = conn_db()
     s_sql = """SELECT a_pkgname_list, a_name_list, a_classify, a_softgame FROM t_apps_basic_united
@@ -36,5 +37,22 @@ def get_classify():
                 except Exception as excep:
                     logging.error("Insert Error: %s", excep)
 
+
+def get_andr_classify():
+    # get android apps that accord with standard classify  t_apps_basic_new  --->  t_pkg_classify
+    conn, cur = conn_db()
+    sql = """INSERT INTO t_pkg_classify (pkgname, softgame, name_list, classify, platform)
+                    SELECT t0.a_pkgname AS pkgname, GROUP_CONCAT(DISTINCT t0.a_softgame SEPARATOR ",") AS softgame,
+                    GROUP_CONCAT(DISTINCT t0.a_name SEPARATOR ",") AS name,
+                    GROUP_CONCAT(DISTINCT a_classify SEPARATOR ",") AS classify,
+                    "android" AS platform FROM
+                    (SELECT a_pkgname, a_softgame, a_name, a_classify
+                      FROM t_apps_basic_new
+                      WHERE a_getdate = "2016-09-25" AND a_source NOT LIKE "iphone%" AND INSTR(a_classify,":")>0) t0
+                    GROUP BY a_pkgname;"""
+    cur.execute(sql)
+    conn.commit()
+
+
 if __name__ == "__main__":
-    get_classify()
+    get_andr_classify()
