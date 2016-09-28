@@ -19,7 +19,11 @@ ASO_HEADERS = {
                "ASOD=xyCtGMkg%2BeAQu4jGhbEHbwEv",
     "User-Agent": "Chrome/52.0.2743.116"
 }
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s",
+                    datefmt="%a, %d %b %Y %H:%M:%S",
+                    filename="test.log",
+                    filemode="w")
 url_queue = queue.Queue()
 save_queue = queue.Queue()
 
@@ -80,9 +84,9 @@ def update_item():
     update_sql = "UPDATE t_ios_classify SET pkgname = %s, name_list = %s WHERE bundleid = %s;"
     update_count = 0
     while save_queue.qsize() > 0 or url_queue.qsize() > 0:
-        print(save_queue.qsize())
+        logging.debug(save_queue.qsize())
         save_item = save_queue.get()
-        print(save_item)
+        logging.debug(save_item)
         bundleid = save_item[0]
         pkgname = save_item[1]
         andr_name = save_item[2]
@@ -108,7 +112,7 @@ if __name__ == "__main__":
 
     for th in threads:
         if th.is_alive():
-            print("is alive")
+            logging.debug("is alive")
             th.join()
 
     exit()
